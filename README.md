@@ -14,11 +14,11 @@ Koa 是由 Express 原班人马打造的，通过组合不同的 generator 免�
 node 版本必须大于 7.6.0 ,否则需要使用 babel 或者升级 node
 
 ```shell
-node --version # v8.9.0
-mkdir koa-demo
-cd koa-demo
-npm init
-sudo npm install --save koa # koa 版本 v2.4.1
+    node --version # v8.9.0
+    mkdir koa-demo
+    cd koa-demo
+    npm init
+    sudo npm install --save koa # koa 版本 v2.4.1
 ```
 
 ### 基本使用
@@ -38,9 +38,13 @@ sudo npm install --save koa # koa 版本 v2.4.1
 
 ```
 
-中间件使用
+### 中间件使用
 
-中间件是一个函数（异步或者同步）处在 HTTP request（请求）与 HTTP response （响应）之间，用来实现某种中间功能 app.use() 来加载中间件。基本上，Koa 所有功能都是通过中间件来实现的，中间件函数会被传入两个参数：1) ctx context 对象，表示一次对话的上下文（requset和response）；2) next 函数，调用 next 函数可以把执行权交给下一个中间件，下一个中间件执行完会把执行权再交回上一个中间件。如果中间件中有异步操作，需要使用 async、await 关键字，将其写成异步函数
+中间件是一个函数（异步或者同步）处在 HTTP request（请求）与 HTTP response （响应）之间，用来实现某种中间功能 app.use() 来加载中间件。基本上，Koa 所有功能都是通过中间件来实现的，中间件函数会被传入两个参数：
+1. ctx context 对象，表示一次对话的上下文（requset和response）；
+2. next 函数，调用 next 函数可以把执行权交给下一个中间件，下一个中间件执行完会把执行权再交回上一个中间件。如果中间件中有异步操作，需要使用 async、await 关键字，将其写成异步函数
+
+```js
     const Koa = require('koa');
     const app = new Koa();
 ​
@@ -77,57 +81,22 @@ sudo npm install --save koa # koa 版本 v2.4.1
     app.use(fn1);
     app.use(fn2);
     app.use(fn3);
-​
+
     app.listen(3387, function () {
         console.log('listen at http://localhost:' + 3387);
     });
-1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-20
-21
-22
-23
-24
-25
-26
-27
-28
-29
-30
-31
-32
-33
-34
-35
-36
-37
-38
-39
-40
-路由
+```
+### 路由
 
 koa 路由需要使用中间件 koa-router
-    npm install --save koa-router
-1
-1. 一般用法
 
+```shell
+    npm install --save koa-router
+```
+
+#### 1. 一般用法
+
+```js
     const Koa = require('koa');
     const Router = require('koa-router');
 ​
@@ -146,27 +115,15 @@ koa 路由需要使用中间件 koa-router
     app.listen(3387, function () {
         console.log('listen at http://localhost:' + 3387);
     });
-1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-2. router 的 HTTP 动词方法 get|put|post|patch|delete|del|all
+    
+```
+
+
+#### 2. router 的 HTTP 动词方法 get|put|post|patch|delete|del|all
 
 router.all() 方法用来匹配所有 HTTP 动词
+
+```js
     router
         .all('/*', (ctx, next) => {
             ctx.body = ctx._matchedRoute + ' all\n'; // ctx._matchedRoute 获得匹配的 url
@@ -185,25 +142,11 @@ router.all() 方法用来匹配所有 HTTP 动词
             ctx.body += ctx._matchedRoute + '--' + ctx.params.user + ' get admin/user\n'; 
             next();
         })
-1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-3. 多个中间件
+ ```
+
+#### 3. 多个中间件
+
+```js
 
     router.get('/admin/:user/*', (ctx, next) => {
         ctx.body += ctx._matchedRoute + '--' + ctx.params.user + '\n';
@@ -212,15 +155,10 @@ router.all() 方法用来匹配所有 HTTP 动词
         ctx.body += ' get admin/user\n';
         next();
     })
-1
-2
-3
-4
-5
-6
-7
-4. 嵌套路由
+```
 
+#### 4. 嵌套路由
+```js
     const app = new Koa();
     const router = new Router();
     const admin = new Router();
@@ -234,19 +172,8 @@ router.all() 方法用来匹配所有 HTTP 动词
 ​
     app.use(router.routes());
     app.use(router.allowedMethods());
-1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
+    
+```
 5. 定义路由前缀
 
     const admin = new Router({
