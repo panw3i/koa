@@ -187,28 +187,22 @@ router.all() 方法用来匹配所有 HTTP 动词
 ​
     app.use(admin.routes());
     app.use(admin.allowedMethods());
-1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-6. 其他 API
+```
+
+#### 6. 其他 API
 
 1. router.routes()
 
 返回一个中间件，这个中间件根据请求分派路由
+
 2. router.allowedMethods([options])
 
 根据不同类型（也就是 options 参数）的请求允许请求头包含的方法，返回不同的中间件，以及响应 405 [不被允许] 和 501 [未实现]
 options => {throw: true} 抛出错误而不是设置返回状态码 statue 和标头 header
 options => {notImplemented: () => returnedValue} 使用这个函数抛出的值代替原来的 notImplemented 501 未实现错误
 options => {methodNotAllowed: () => returnedValue} 使用这个函数抛出的值代替原来的 notImplemented 405 不被允许错误
+
+```js
     // 官网例子
     const Koa = require('koa');
     const Router = require('koa-router');
@@ -223,25 +217,15 @@ options => {methodNotAllowed: () => returnedValue} 使用这个函数抛出的�
       notImplemented: () => new Boom.notImplemented(),
       methodNotAllowed: () => new Boom.methodNotAllowed()
     }));
-1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
+```
+
 3. router.use([path], middleware)
 
 在路由中使用中间件，中间件运行的顺序是 .use() 方法调用的顺序
 path 允许调用中间件的路径，可以是一个路径字符串，也可以是路径组成的数组，不设置表示所有路径都可以使用
 middleware 要使用的中间件
+
+```js
     const admin = new Router({
         prefix: '/admin'
     });
@@ -258,25 +242,13 @@ middleware 要使用的中间件
 ​
     app.use(admin.routes());
     app.use(admin.allowedMethods());
-1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
+```
+
 4. router.prefix(prefix)
 
 返回一个子路由，这个路由挂载在 router 上，并且设置了 prefix 前缀
+
+```js
     const router = new Router();
     const admin = router.prefix('/admin');
 ​
@@ -288,20 +260,13 @@ middleware 要使用的中间件
 ​
     app.use(router.routes());
     app.use(router.allowedMethods());
-1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
+```
+
 5. router.redirect(source, destination, code)
 
 重定向资源 source 到目的地地址 destination 使用 30x 状态码（code 定义）
+
+```js
     const admin = router.prefix('/admin');
 ​
     console.log(admin instanceof Router); // true
@@ -315,22 +280,13 @@ middleware 要使用的中间件
     admin.get('/test', (ctx) => {
         ctx.body = 'in /admin/test';
     })
-1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
+```
+
 6. router.param(param, middleware)
 
 给路由参数 param 添加中间件，后续 router 路径中 含有 这个参数的，都会首先触发这个中间件，一般用于自动验证等
+
+```js
     admin
         .param('user', (id, ctx, next) => {
             ctx.state.user = users[id] || null;
@@ -352,53 +308,34 @@ middleware 要使用的中间件
             ctx.body = '/admin/cde ' + JSON.stringify(ctx.state.user); 
             next();
         })
-1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-20
-21
-22
-Koa API
+        
+        
+```
+### Koa API
 
 1. Application 应用
 
 通过 new Koa() 创建
+
 1. app 对象的属性（设置）
 
 app.env 默认是 NODE_ENV 的值或者 “development”
 app.proxy 布尔值，当真正的代理头字段被信任时，设置为 true 时支持 X-Forwarded-Host 可以使用代理中的地址信息
 app.subdomainOffset 用于设置子域名的偏移值，默认为 2 ,再调用 req.subdomains 返回子域名时 例如 tobi.ferrets.example.com 这样的域名会返回 ["ferrets", "tobi"] 如果设置偏移值为 3 则返回 ["tobi"]
+
+```js
     const Koa = require('koa');
     const app = new Koa();
 ​
     console.log(app.env); // development
     console.log(app.proxy); // false
     app.subdomainOffset = 3;
-1
-2
-3
-4
-5
-6
+```
 2. app.listen()
 
 listen() 方法只是在内部通过 http.createServer() 创建并返回一个 服务器，给定的参数都会传递给创建的 server.listen(...args) 开启 HTTP 服务
+
+```js
     // 伪代码
     const Koa = require('koa');
     const http = require('http');
@@ -411,21 +348,13 @@ listen() 方法只是在内部通过 http.createServer() 创建并返回一个 �
 ​
     http.createServer(app.callback()).listen(3387);
     https.createServer(options, app.callback).listen(3388);
-1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
+```
+
 4. app.callback()
 
 返回适用于 http.createServer() 方法的回调函数来处理请求也可以使用此回调函数将 Koa 挂载到 Connect/Express 应用程序中
+
+```js
     const Koa = require('koa');
     const express = require('express');
 ​
@@ -450,36 +379,15 @@ listen() 方法只是在内部通过 http.createServer() 创建并返回一个 �
     app.listen(3387, function () {
         console.log('listen at http://localhost:' + 3387);
     });
-1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-20
-21
-22
-23
-24
+```
 5. app.use()
 
 用来加载中间件，Koa 所有的功能都是通过中间件实现的，每个中间件默认接受两个参数，第一个参数是 Context 对象，第二个参数是next函数，只要调用next函数，就可以把执行权转交给下一个中间件。
 6. app.keys
 
 设置签名的 Cookie 秘钥
+
+```js
     // app.keys 设置签名的 Cookie 秘钥
     app.keys = ['im a newer secret', 'i like turtle'];
 ​
@@ -489,18 +397,13 @@ listen() 方法只是在内部通过 http.createServer() 创建并返回一个 �
         ctx.body = 'in app';
         next();
     });
-1
-2
-3
-4
-5
-6
-7
-8
-9
+```
+
 7. app.context
 
 应用创建的 ctx 的原型，可以在其上添加其他属性，这样整个应用的 ctx 都可以使用这些属性
+
+```js
     app.context.testProp = 'test'; // 添加属性
 ​
     app.use((ctx, next) => {
@@ -509,17 +412,13 @@ listen() 方法只是在内部通过 http.createServer() 创建并返回一个 �
         console.log(ctx.__proto__ === app.context); // true 
         next();
     });
-1
-2
-3
-4
-5
-6
-7
-8
+```
+
 8. error 事件
 
 运行过程中一旦出错，Koa 会触发一个 error 事件，监听这个事件，可以处理错误，但是中间件中如果错误被 try...catch 捕获，则不会触发 error 事件，这个时候可以调用 ctx.app.emit() 手动释放 error 事件
+
+```js
     app.on('error', function (err) {
         console.log('error Event', err);
     })
@@ -539,25 +438,8 @@ listen() 方法只是在内部通过 http.createServer() 创建并返回一个 �
         ctx.body = 'error';
         ctx.throw('error here');
     })
-1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
+```
+
 2. Context 上下文
 
 Koa Context 将 node 的 request 和 response 对象封装到单个对象中，为编写程序提供了许多有用的方法，这些操作在 HTTP 服务器开发中频繁使用，没给请求都将创建一个 Context，并在中间件中作为接收器引用，或者 ctx 参数
@@ -573,6 +455,8 @@ ctx.cookies.get(name, [options]) 获取名为 name 的 cookie ; options 是参�
 ctx.cookies.set(name, value, [options]) 设置 名为 name 的 cookie 值为 value； options 中的参数，包括签名等
 ctx.throw([status], [msg], [properties]) 用来抛出错误 status 抛出错误的状态码，msg 描述信息, properties 可以设置 error 的其他属性
 ctx.respond 设置为 false 可以绕过 Koa 内置的 response 处理，写入原始的 res 对象而不是让 Koa 处理 response
+
+```js
     // 伪代码，选择执行
     const Koa = require('koa');
     const path = require('path');
@@ -620,54 +504,7 @@ ctx.respond 设置为 false 可以绕过 Koa 内置的 response 处理，写入�
     app.listen(3387, function () {
         console.log('listen at http://localhost:' + 3387);
     });
-1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-20
-21
-22
-23
-24
-25
-26
-27
-28
-29
-30
-31
-32
-33
-34
-35
-36
-37
-38
-39
-40
-41
-42
-43
-44
-45
-46
-47
-48
+```
 3. Request 请求
 
 通过 ctx.request 获得
@@ -705,6 +542,8 @@ request.acceptsEncodings(encodings) 检查 encodings 是否可以接受，返回
 request.acceptsCharsets(charsets) 检查 charsets 是否可以接受
 request.acceptsLanguages(langs) 检查 langs 是否可以接受
 request.get(field) 返回指定请求标头
+
+```js
     app.use(async (ctx, next) => {
         const {request, response} = ctx; 
         console.log(ctx.header === request.header); // true
@@ -744,68 +583,32 @@ request.get(field) 返回指定请求标头
 ​
         ctx.body = 'in app';
     });
-1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-20
-21
-22
-23
-24
-25
-26
-27
-28
-29
-30
-31
-32
-33
-34
-35
-36
-37
-38
-39
-40
+```
 4. Response 响应
 
 通过 ctx.response 获得
 1. response 对象的属性与方法
 
 斜体的属性与方法没有 ctx 对象的别名
-response.header 返回响应头对象
-response.headers 返回响应头对象 response.header 的别名
-response.status 获取、设置响应状态 默认为 404 ，根据响应状态码会有对应的响应信息
-response.message 获取、设置响应状态的消息，默认是根据 response.status 对应的
-response.length 获取、设置响应的 Content-Length，默认为从 ctx.body 中推导出来 或者 undefined
-response.body 获取、设置相应的主体，使用 .body 设置后，Koa 会自动将状态设置为 200 或者 204 ，除非 使用 response.status 设置了响应状态；body 设置的值可以是 String\Buffer\Stream\Object
-response.get(field) 获取指定响应头
-response.set(field, value) 设置响应头 field 值为 value
-response.set(fields) 用一个对象设置多个响应标头 fields 是一个 header 的对象
-response.append(field, value) 给 field 标头添加 value 值
-response.remove(field) 删除名为 field 的标头
-reponse.type 获取、设置 响应 Content-Type 的值
-response.is(types...) 检查指定的类型是否是所提供的类型之一
-response.redirect(url, [alt]) 执行 [302] 重定向到 url
-response.headerSent 返回是否已经发送了一个响应头
-response.lastModified 获取、设置最后修改日期
+
+`response.header` 返回响应头对象
+`response.headers` 返回响应头对象 response.header 的别名
+`response.status` 获取、设置响应状态 默认为 404 ，根据响应状态码会有对应的响应信息
+`response.message` 获取、设置响应状态的消息，默认是根据 response.status 对应的
+`response.length` 获取、设置响应的 Content-Length，默认为从 ctx.body 中推导出来 或者 undefined
+`response.body` 获取、设置相应的主体，使用 .body 设置后，Koa 会自动将状态设置为 200 或者 204 ，除非 使用 response.status 设置了响应状态；body 设置的值可以是 String\Buffer\Stream\Object
+`response.get(field)` 获取指定响应头
+`response.set(field, value)` 设置响应头 field 值为 value
+`response.set(fields`) 用一个对象设置多个响应标头 fields 是一个 header 的对象
+`response.append(field, value)` 给 field 标头添加 value 值
+`response.remove(field)` 删除名为 field 的标头
+`reponse.type` 获取、设置 响应 Content-Type 的值
+`response.is(types...)` 检查指定的类型是否是所提供的类型之一
+`response.redirect(url, [alt])` 执行 [302] 重定向到 url
+`response.headerSent` 返回是否已经发送了一个响应头
+`response.lastModified` 获取、设置最后修改日期
+
+```js
     const Koa = require('koa');
     const fs = require('fs');
 ​
@@ -850,4 +653,5 @@ response.lastModified 获取、设置最后修改日期
     app.listen(3387, function () {
         console.log('listen at http://localhost:' + 3387);
     });
+```
 
