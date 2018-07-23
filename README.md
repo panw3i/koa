@@ -512,35 +512,62 @@ ctx.respond 设置为 false 可以绕过 Koa 内置的 response 处理，写入�
 
 斜体的属性与方法没有 ctx 对象的别名
 `request.header` 获取、设置请求标头
+
 `request.headers` 获取、设置请求标头 与 request.header 一样（===）
+
 `request.method` 获取、设置请求方法
+
 `request.length` 以数字返回请求的 Content-Length，或 undefined
+
 `request.url` 获取、设置请求 url
+
 `request.originalUrl` 获取请求原始URL
+
 `request.origin` 获取URL的来源，包括 protocol 和 host
+
 `request.href` 获取完整的请求URL，包括 protocol，host 和 url
+
 `request.path` 获取、设置请求路径名
+
 `request.querystring` 获取、设置原始查询字符串(字符串格式)
+
 `request.query` 获取、设置解析的查询字符串, 当没有查询字符串时，返回一个空对象
+
 `request.search` 获取、设置原始查询字符串(带)
+
 `request.host` 获取当前主机（hostname:port）
+
 `request.hostname` 存在时获取主机名
+
 `request.protocol` 返回请求协议，“https” 或 “http”
+
 `request.secure` 检查请求是否通过 TLS 发出
+
 `request.ip` 请求远程地址
+
 `request.subdomains` 将子域返回为数组
+
 `request.URL` 获取 WHATWG 解析的 URL 对象
+
 `request.type` 获取请求 Content-Type 不含参数 “charset”
+
 `request.charse`t 在存在时获取请求字符集，或者 undefined
+
 `request.fresh` 检查请求缓存是否“新鲜”，也就是内容没有改变
+
 `request.stale` 检查请求缓存是否是陈旧的
+
 
 `request.is(types...)` 检查传入请求是否包含 Content-Type 头字段， 并且包含任意的 mime type。 如果没有请求主体，返回 null。 如果没有内容类型，或者匹配失败，则返回 false。 反之则返回匹配的 content-type。
 
 `request.accepts(types)` 检查给定的 type(s) 是否可以接受，如果 true，返回最佳匹配，否则为 false。 type 值可能是一个或多个 mime 类型的字符串，如 application/json，扩展名称如 json，或数组
+
 `request.acceptsEncodings(encodings)` 检查 encodings 是否可以接受，返回最佳匹配为 true，否则为 false
+
 `request.acceptsCharsets(charsets)` 检查 charsets 是否可以接受
+
 `request.acceptsLanguages(langs)` 检查 langs 是否可以接受
+
 `request.get(field)` 返回指定请求标头
 
 ```js
