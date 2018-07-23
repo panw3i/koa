@@ -592,21 +592,37 @@ request.get(field) 返回指定请求标头
 斜体的属性与方法没有 ctx 对象的别名
 
 `response.header` 返回响应头对象
+
 `response.headers` 返回响应头对象 response.header 的别名
+
 `response.status` 获取、设置响应状态 默认为 404 ，根据响应状态码会有对应的响应信息
+
 `response.message` 获取、设置响应状态的消息，默认是根据 response.status 对应的
+
 `response.length` 获取、设置响应的 Content-Length，默认为从 ctx.body 中推导出来 或者 undefined
+
 `response.body` 获取、设置相应的主体，使用 .body 设置后，Koa 会自动将状态设置为 200 或者 204 ，除非 使用 response.status 设置了响应状态；body 设置的值可以是 String\Buffer\Stream\Object
+
 `response.get(field)` 获取指定响应头
+
 `response.set(field, value)` 设置响应头 field 值为 value
+
 `response.set(fields`) 用一个对象设置多个响应标头 fields 是一个 header 的对象
+
 `response.append(field, value)` 给 field 标头添加 value 值
+
 `response.remove(field)` 删除名为 field 的标头
+
 `reponse.type` 获取、设置 响应 Content-Type 的值
+
 `response.is(types...)` 检查指定的类型是否是所提供的类型之一
+
 `response.redirect(url, [alt])` 执行 [302] 重定向到 url
+
 `response.headerSent` 返回是否已经发送了一个响应头
+
 `response.lastModified` 获取、设置最后修改日期
+
 
 ```js
     const Koa = require('koa');
